@@ -11,7 +11,8 @@ const config: HardhatUserConfig = {
   solidity: "0.8.20",
   networks: {
     zircuit: {
-      url: "https://lb.drpc.org/ogrpc?network=zircuit-mainnet&dkey=Ak-Z7kImikFJlIL_i3Tid5LqCV3y_X8R76CMnqSgS7QB",
+      // url: "https://lb.drpc.org/ogrpc?network=zircuit-mainnet&dkey=Ak-Z7kImikFJlIL_i3Tid5LqCV3y_X8R76CMnqSgS7QB",
+      url: "https://lb.drpc.org/ogrpc?network=zircuit-garfield-testnet&dkey=Ak-Z7kImikFJlIL_i3Tid5LqCV3y_X8R76CMnqSgS7QB",
       accounts: [PRIVATE_KEY],
     },
   },
