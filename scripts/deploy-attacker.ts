@@ -1,25 +1,31 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  // 合約地址
-  const tokenAddress = "0x0CB70e82cDA48ac413d15dDb5782130F57ef8844";
-  const flashloanAddress = "0x19839DfeCA322bb9Ea042bb2154fe3C77c93E857";
-  const whalebadgeAddress = "0xac9a1d6E3452D55dc42aBB8AE3ACEAd98C089FAc";
+  // 獲取已部署的 OnsiteW2Lab1Flags 合約地址
+  const flagsContractAddress = "0x4Ee5C4Ab799404Dc474B8509b07C5a2E38F314F6";
+
+  if (!flagsContractAddress) {
+    throw new Error("請先設置環境變數 FLAGS_CONTRACT_ADDRESS");
+  }
+
+  console.log("部署 Exploit 合約中...");
+  console.log("目標 OnsiteW2Lab1Flags 合約地址:", flagsContractAddress);
+
+  const [deployer] = await ethers.getSigners();
+  console.log("部署地址:", deployer.address);
 
   // 部署攻擊合約
-  const Attacker = await ethers.getContractFactory(
-    "WhaleBadgeFlashloanAttacker"
-  );
-  const attacker = await Attacker.deploy(
-    flashloanAddress,
-    whalebadgeAddress,
-    tokenAddress
-  );
+  const Exploit = await ethers.getContractFactory("Exploit");
+  const attackerContract = await Exploit.deploy(flagsContractAddress);
+  await attackerContract.waitForDeployment();
 
-  await attacker.waitForDeployment();
-  console.log("攻擊合約已部署到:", await attacker.getAddress());
+  const attackerAddress = await attackerContract.getAddress();
+  console.log("Exploit 合約部署成功:", attackerAddress);
+
+  return { attackerAddress };
 }
 
+// 執行部署
 main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
